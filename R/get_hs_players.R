@@ -1,0 +1,115 @@
+#' get df of hs players based on certain paramters
+#' 
+#' @param state state abbreviation
+#' @param year HS grad year
+#' 
+#' @return data.frame of players from that state
+#' 
+#' @import dplyr
+#' @import rvest
+#' @import tidyr
+#' @import stringr
+#' @import purrr
+#' @import sys
+#' 
+#' @export
+
+get_hs_players <- function(state,year){
+  
+  state <- state %>% toupper()
+  
+  build_html <- paste("https://247sports.com/Season/",year,"-Football/CompositeRecruitRankings/?InstitutionGroup=Highschool&State=",state,sep="")
+  
+  hs_players <- read_html(build_html) %>% 
+    html_nodes(".recruit") %>%
+    html_text() %>%
+    data.frame() 
+  
+  colnames(hs_players) <- c("player")
+  
+  hs_players <- hs_players %>%
+    separate(player,into=c("Player","HS"),sep = "  ",extra="merge") %>% 
+    separate(HS, into=c("HS","Hometown"), sep="[(]")
+  
+  hs_players$Hometown <- str_replace(hs_players$Hometown,"[)]","")
+  
+  Sys.sleep(1)
+  
+  positions <- read_html(build_html) %>% 
+    html_nodes('.position') %>% 
+    html_text() %>% 
+    data.frame()
+  
+  colnames(positions) <- c("positions")
+  
+  hs_players <- cbind(hs_players,positions)
+  
+  Sys.sleep(1)
+  
+  score <- read_html(build_html) %>% 
+    html_nodes('.score') %>% 
+    html_text() %>% 
+    data.frame() 
+  
+  colnames(score) <- c("score")
+  
+  score <- score[!(score$score=="Rating"),]
+  
+  hs_players <- cbind(hs_players,score)
+  
+  hs_players$score <- as.numeric(as.character(hs_players$score))
+  
+  hs_players$stars <- case_when(
+    hs_players$score > 0.98 ~ 5,
+    hs_players$score > 0.9 ~ 4,
+    hs_players$score > 0.79 ~ 3,
+    hs_players$score > 0.7 ~ 2,
+    TRUE ~ 1
+  )
+  
+  commits <- read_html(build_html) %>% html_nodes('.status') %>% html_nodes("a") %>% html_attr("href")
+  i <- 1
+  j <- 1
+  commit_status <- vector(mode = "character",length = nrow(positions))
+  
+  for (link in commits){
+    first_letter <- link %>% substring(1,1)
+    if (first_letter == "h"){
+      url <- link %>% str_split("/")
+      school <- url[[1]][5] %>% simpleCap()
+      commit_status[j] <- school
+      j = j+1
+    }
+    else {
+      peek <- commits[i-1]
+      peek_letter <- peek %>% substring(1,1)
+      if (peek_letter == "/"){
+        commit_status[j] <- "Undecided"
+        j=j+1
+      }
+    }
+    i = i+1
+  }
+  
+  hs_players <- cbind(hs_players,commit_status)
+  
+  
+  return(hs_players)
+  
+}
+
+#' helper function to format committs
+#' 
+#' @param school name of school
+#' 
+#' @import dplyr
+#' @import stringr
+#' 
+#' @return string of corrected school name
+
+simpleCap <- function(x) {
+  x <- x %>% str_replace("-"," ")
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
