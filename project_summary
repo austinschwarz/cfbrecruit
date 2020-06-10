@@ -1,0 +1,23 @@
+Schwarz, Austin
+6/8/20
+STAT 431
+
+Project Summary
+
+1. Blurb
+
+My package allows people to easily access college football recruiting data provided by 247Sports and CBS Sports. This includes getting recruits by state, position, year, commitment status, and more! It also allows for the interactive visualization of which parts of the country and the world (PUNTERS!) players come from. 
+
+2. Detail for Profs
+
+- The first part of my package is the data scraping using rvest on 247Sports.com. The most challenging part of this was scraping the commitments of players.
+- The function I made scrapes based on a player's homestate, position, or current commitment status. You can also see more than one year.
+- Another part gets the top 50 recruits in the country in a data.frame format. This isn't too complicated but it was fun to use in the visualization tool 
+- The last part of my package is taking the data frames of players and visualizing them in a leaflet map. The leaflet map is interactive and if you click on a marker on the map you can see a player's name, hometown, HS, year, position, rating, stars, and commitment status. If you have more than one year in your data set the markers will be different colors based on year. 
+
+3. Other skills
+
+- The commitments were in a .status url according to selectorgadget. Some of the players are committed, which was easy to scrape because they were only associated with a single school. However, some players are uncommitted and are associated with more than one school, so it took some tricky parsing to work around them. 
+- I scraped coordinates for each player's hometown using nominatim.org. I had to create lots of conditionals for edge cases (ex Couer d'Alene needs to be parsed differently for a url because of the "'")
+
+-  I give permission to share this project publicly, with my name attached to it.
