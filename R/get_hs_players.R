@@ -18,8 +18,13 @@ get_hs_players <- function(state,year){
   
   state <- state %>% toupper()
   
-  build_html <- paste("https://247sports.com/Season/",year,"-Football/CompositeRecruitRankings/?InstitutionGroup=Highschool&State=",state,sep="")
-  
+  if (state == "USA"){
+    build_html <- paste("https://247sports.com/Season/", year, "-Football/CompositeRecruitRankings/?InstitutionGroup=highschool",sep="")
+  }
+  else{
+    build_html <- paste("https://247sports.com/Season/",year,"-Football/CompositeRecruitRankings/?InstitutionGroup=Highschool&State=",state,sep="")
+  }
+ 
   hs_players <- read_html(build_html) %>% 
     html_nodes(".recruit") %>%
     html_text() %>%
