@@ -50,5 +50,6 @@ map_of_players <- function(players){
                                                   "Hometown: ", players$City, "<br>",
                                                   "Rating: ", players$score, "<br>",
                                                   "Stars: ", players$stars, "<br>",
-                                                  "Commit Status: ", players$commit_status))
+                                                  "Commit Status: ", players$commit_status, "<br>",
+                                                  "Year: ", players$year))
 }
