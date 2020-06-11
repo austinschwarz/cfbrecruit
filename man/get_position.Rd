@@ -4,7 +4,7 @@
 \alias{get_position}
 \title{get df of players based on positions}
 \usage{
-get_position(position, year)
+get_position(position, years)
 }
 \arguments{
 \item{position}{position of players}

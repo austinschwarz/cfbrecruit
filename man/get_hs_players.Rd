@@ -4,7 +4,7 @@
 \alias{get_hs_players}
 \title{get df of hs players based on certain paramters}
 \usage{
-get_hs_players(state, year)
+get_hs_players(state, years)
 }
 \arguments{
 \item{state}{state abbreviation}

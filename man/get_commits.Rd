@@ -4,7 +4,7 @@
 \alias{get_commits}
 \title{get df of recruits based on certain paramters}
 \usage{
-get_commits(college, year)
+get_commits(college, years)
 }
 \arguments{
 \item{college}{college name (to avoid confusion like Southern Cal and South Carolina, which would both be USC)}

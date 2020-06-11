@@ -17,4 +17,12 @@ RoxygenNote: 7.1.0
 Suggests: 
     testthat
 Imports: 
-    magrittr
+    magrittr,
+    dplyr,
+    jsonlite,
+    purrr,
+    rvest,
+    stringr,
+    sys,
+    tidyr,
+    tidyverse
